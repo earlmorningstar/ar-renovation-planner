@@ -1,21 +1,26 @@
-import create from "zustand";
+import { create } from "zustand";
 
-type FurnitureItem = {
+export type FurnitureItem = {
   id: string;
   name: string;
   price: number;
   position: [number, number, number];
   rotation: [number, number, number];
   modelUrl: string;
+  category: string;
 };
 
 type ProjectState = {
   selectedItems: FurnitureItem[];
   addItem: (item: FurnitureItem) => void;
-  removeItem: (id: string, position: [number, number, number]) => void;
+  removeItem: (id: string) => void;
   updateItemPosition: (id: string, position: [number, number, number]) => void;
   updateItemRotation: (id: string, position: [number, number, number]) => void;
-  projectData: any;
+  projectData: {
+    name: string;
+    items: FurnitureItem[];
+    createdAt: string;
+  };
 };
 
 export const useStore = create<ProjectState>((set) => ({
@@ -25,7 +30,7 @@ export const useStore = create<ProjectState>((set) => ({
       selectedItems: [...state.selectedItems, item],
       projectData: {
         ...state.projectData,
-        items: [...(state.projectData?.items || []), item],
+        items: [...state.projectData.items, item],
       },
     })),
   removeItem: (id) =>
@@ -33,9 +38,7 @@ export const useStore = create<ProjectState>((set) => ({
       selectedItems: state.selectedItems.filter((item) => item.id !== id),
       projectData: {
         ...state.projectData,
-        items: (state.projectData?.items || []).filter(
-          (item: FurnitureItem) => item.id !== id
-        ),
+        items: state.projectData.items.filter((item) => item.id !== id),
       },
     })),
   updateItemPosition: (id, position) =>
@@ -45,7 +48,7 @@ export const useStore = create<ProjectState>((set) => ({
       ),
       projectData: {
         ...state.projectData,
-        items: (state.projectData?.items || []).map((item: FurnitureItem) =>
+        items: state.projectData.items.map((item) =>
           item.id === id ? { ...item, position } : item
         ),
       },
@@ -57,7 +60,7 @@ export const useStore = create<ProjectState>((set) => ({
       ),
       projectData: {
         ...state.projectData,
-        items: (state.projectData?.items || []).map((item: FurnitureItem) =>
+        items: state.projectData.items.map((item) =>
           item.id === id ? { ...item, rotation } : item
         ),
       },

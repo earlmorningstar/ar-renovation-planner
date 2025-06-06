@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useStore } from "@/stores/projectStore";
+import { FurnitureItem } from "@/stores/projectStore";
 
 export default function AIDesignAdvisor() {
   const { projectData } = useStore();
@@ -37,17 +38,23 @@ export default function AIDesignAdvisor() {
       };
 
       //determine room type
-      const roomType = projectData.items.some((i: any) => i.category === "bed")
+      const roomType = projectData.items.some(
+        (i: FurnitureItem) => i.category === "bed"
+      )
         ? "bedroom"
-        : projectData.items.some((i: any) => i.category === "oven")
+        : projectData.items.some((i: FurnitureItem) => i.category === "oven")
         ? "kitchen"
         : "living";
 
       setSuggestions(
         mockSuggestions[roomType as keyof typeof mockSuggestions] || []
       );
-    } catch (error) {
+    } catch (err: unknown) {
+      console.error("Error getting suggestions:", err);
       setError("Failed to get suggestions. Please try again.");
+      if (err instanceof Error) {
+        console.error("Error details:", err.message);
+      }
     } finally {
       setIsLoading(false);
     }

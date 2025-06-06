@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useStore } from "@/stores/projectStore";
+import type { FurnitureItem } from "@/stores/projectStore";
 
 export default function CostCalculator() {
   const { selectedItems } = useStore();
@@ -11,7 +12,7 @@ export default function CostCalculator() {
 
   useEffect(() => {
     const subtotal = selectedItems.reduce(
-      (sum, item) => sum + (item.price || 0),
+      (sum: number, item: FurnitureItem) => sum + (item.price || 0),
       0
     );
     const tax = subtotal * taxRate;

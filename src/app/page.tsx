@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
             <h2 className="text-xl font-semibold mb-2">{feature.title}</h2>
             <p className="mb-4">{feature.description}</p>
             <Link href={feature.link}>
-              <Button varient="primary">{feature.cta}</Button>
+              <Button variant="primary">{feature.cta}</Button>
             </Link>
           </div>
         ))}
